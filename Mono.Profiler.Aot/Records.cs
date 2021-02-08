@@ -174,6 +174,19 @@ namespace Mono.Profiler.Aot
             get; set;
         }
 
+        public string FullName {
+            get {
+                string prefix;
+
+                if (Name.Length > 0 && Name [0] == '.')
+                    prefix = Type!.ToString ();
+                else
+                    prefix = "";
+
+                return $"{prefix}{Name}{GenericInst}";
+            }
+        }
+
         public override string ToString ()
         {
             return $"{Signature.Replace ("(", $" {Type}:{Name} (")}";

@@ -4,9 +4,9 @@ namespace filter_aot_profile
 {
     class Program
     {
-        public static void FilterAOTProfile(string profilePath, string[] excluded)
+        public static void FilterAOTProfile(string profilePath, string[] excluded, bool dump)
         {
-            AotProfileFilter filter = new AotProfileFilter(profilePath, "filtered.aotprofile", excluded);
+            AotProfileFilter filter = new AotProfileFilter(profilePath, "filtered.aotprofile", excluded, dump);
             filter.Execute();
         }
 
@@ -17,7 +17,7 @@ namespace filter_aot_profile
         }
         static void Main(string[] args)
         {
-            FilterAOTProfile("data.aotprofile", null);
+            FilterAOTProfile("aot.profile", null, true);
         }
     }
 }

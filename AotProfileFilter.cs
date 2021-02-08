@@ -35,7 +35,7 @@ public class AotProfileFilter
         var methodNames = new List<string>();
         foreach (MethodRecord method in profile.Methods)
         {
-            methodNames.Add(method.Name);
+            methodNames.Add(method.FullName);
         }
         return methodNames.ToArray();
     }

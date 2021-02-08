@@ -135,7 +135,6 @@ namespace Mono.Profiler.Aot
                     var method = new MethodRecord(id, type, ginst, name, sig, param_count);
                     methods.Add(method);
                     records [id] = method;
-                    Console.WriteLine($"METHODS {name}\n");
                     break;
                 }
                 default:
