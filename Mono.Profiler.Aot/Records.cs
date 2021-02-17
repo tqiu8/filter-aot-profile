@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace Mono.Profiler.Aot
 {
@@ -17,7 +18,8 @@ namespace Mono.Profiler.Aot
         {
             Id = id;
         }
-
+        
+        [JsonIgnore]
         public int Id {
             get; set;
         }
@@ -35,6 +37,7 @@ namespace Mono.Profiler.Aot
         {
             Name = name;
             Mvid = mvid;
+            Types = new List<TypeRecord>();
         }
 
         public string Name {
@@ -43,6 +46,14 @@ namespace Mono.Profiler.Aot
 
         public string Mvid {
             get; set;
+        }
+
+        public List<TypeRecord> Types {
+            get; set;
+        }
+
+        public void AddType(TypeRecord type) {
+            Types.Add(type);
         }
 
         public override string ToString ()
@@ -102,13 +113,19 @@ namespace Mono.Profiler.Aot
             Module = module;
             Name = name;
             GenericInst = ginst;
+            Methods = new List<MethodRecord>();
         }
 
+        [JsonIgnore]
         public ModuleRecord Module {
             get; set;
         }
 
         public string Name {
+            get; set;
+        }
+
+        public List<MethodRecord> Methods {
             get; set;
         }
 
@@ -134,6 +151,10 @@ namespace Mono.Profiler.Aot
         {
             return FullName;
         }
+
+        public void AddMethod(MethodRecord method) {
+            Methods.Add(method);
+        }
     }
 
     public class MethodRecord : ProfileRecord
@@ -153,27 +174,25 @@ namespace Mono.Profiler.Aot
             Signature = sig;
             ParamCount = param_count;
         }
-
+        [JsonIgnore]
         public TypeRecord Type {
             get; set;
         }
-
+        [JsonIgnore]
         public GenericInstRecord? GenericInst {
             get; set;
         }
-
         public string Name {
             get; set;
         }
-
         public string Signature {
             get; set;
         }
-
+        [JsonIgnore]
         public int ParamCount {
             get; set;
         }
-
+        [JsonIgnore]
         public string FullName {
             get {
                 string prefix;
@@ -183,7 +202,7 @@ namespace Mono.Profiler.Aot
                 else
                     prefix = "";
 
-                return $"{prefix}{Name}{GenericInst}";
+                return $"{prefix}{Signature}{Name}{GenericInst}";
             }
         }
 

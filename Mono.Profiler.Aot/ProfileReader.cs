@@ -71,6 +71,7 @@ namespace Mono.Profiler.Aot
             var methods = new List<MethodRecord>();
 
             Dictionary<int, ProfileRecord> records = new Dictionary<int, ProfileRecord>();
+            Dictionary<int, int> indices = new Dictionary<int, int>();
 
             while (true) {
                 RecordType rtype =(RecordType)s_data [s_pos];
@@ -84,6 +85,7 @@ namespace Mono.Profiler.Aot
                     string mvid = ReadString();
                     var module = new ModuleRecord(id, name, mvid);
                     records [id] = module;
+                    indices [id] = modules.Count;
                     modules.Add(module);
                     break;
                 }
@@ -112,8 +114,10 @@ namespace Mono.Profiler.Aot
                         if (ginst_id != -1)
                             inst =(GenericInstRecord)records [ginst_id];
 
-                        var module =(ModuleRecord)records [image_id];
+                        var module = modules[indices [image_id]];
                         var type = new TypeRecord(id, module, name, inst);
+                        module.AddType(type);
+                        indices [id] = types.Count;
                         types.Add(type);
                         records [id] = type;
                         break;
@@ -130,11 +134,12 @@ namespace Mono.Profiler.Aot
                     string name = ReadString();
                     string sig = ReadString();
 
-                    var type =(TypeRecord)records [class_id];
+                    var type = types[indices [class_id]];
                     GenericInstRecord? ginst = ginst_id != -1 ? (GenericInstRecord)records [ginst_id] : null;
                     var method = new MethodRecord(id, type, ginst, name, sig, param_count);
+                    type.AddMethod(method);
                     methods.Add(method);
-                    records [id] = method;
+                    // records [id] = method;
                     break;
                 }
                 default:

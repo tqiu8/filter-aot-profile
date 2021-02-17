@@ -25,14 +25,15 @@ public class AotProfileToJson
         using (FileStream stream = File.OpenRead(Input!))
         {
             data = reader.ReadAllData(stream);
+            ModuleRecord[] modules = data.Modules;
             var serializeOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                ReferenceHandler = ReferenceHandler.Preserve,
+                // ReferenceHandler = ReferenceHandler.Preserve,
                 IgnoreNullValues = true,
                 WriteIndented = true,
             };
-            string s = JsonSerializer.Serialize(data, serializeOptions);
+            string s = JsonSerializer.Serialize(modules, serializeOptions);
             File.WriteAllText(Output!, s);
         }
         return true;

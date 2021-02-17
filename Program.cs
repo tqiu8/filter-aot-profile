@@ -12,12 +12,13 @@ namespace filter_aot_profile
 
         public static void ProfileToJson()
         {
-            AotProfileToJson json = new AotProfileToJson("data.aotprofile", "data.json");
+            AotProfileToJson json = new AotProfileToJson("data.aotprofile", "data1.json");
             json.Execute();
         }
         static void Main(string[] args)
         {
-            FilterAOTProfile("aot.profile", null, true);
+            // FilterAOTProfile("aot.profile", null, true);
+            ProfileToJson();
         }
     }
 }
