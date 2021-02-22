@@ -112,7 +112,7 @@ namespace Mono.Profiler.Aot {
             WriteInt32 (value);
         }
 
-        public void WriteAllData (Stream s, ProfileData data)
+        public void WriteAllData (Stream s, ProfileData data, string[] excluded = null)
         {
             s_stream = s;
 
@@ -122,7 +122,8 @@ namespace Mono.Profiler.Aot {
             WriteInt32 ((MAJOR_VERSION << 16) | MINOR_VERSION);
 
             foreach (var m in data.Methods!)
-                WriteMethod (m);
+                if (excluded != null && !Array.Exists(excluded!, e => e == m.FullName))
+                    WriteMethod (m);
 
             // make sure ew have all the types
             // sometime the profile contain type, which is not referenced from the methods

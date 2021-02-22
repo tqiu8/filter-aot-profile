@@ -19,7 +19,7 @@ namespace Mono.Profiler.Aot
             Id = id;
         }
         
-        [JsonIgnore]
+        // [JsonIgnore]
         public int Id {
             get; set;
         }
@@ -116,7 +116,7 @@ namespace Mono.Profiler.Aot
             Methods = new List<MethodRecord>();
         }
 
-        [JsonIgnore]
+        // [JsonIgnore]
         public ModuleRecord Module {
             get; set;
         }
@@ -174,11 +174,11 @@ namespace Mono.Profiler.Aot
             Signature = sig;
             ParamCount = param_count;
         }
-        [JsonIgnore]
+        // [JsonIgnore]
         public TypeRecord Type {
             get; set;
         }
-        [JsonIgnore]
+        // [JsonIgnore]
         public GenericInstRecord? GenericInst {
             get; set;
         }
@@ -188,7 +188,7 @@ namespace Mono.Profiler.Aot
         public string Signature {
             get; set;
         }
-        [JsonIgnore]
+        // [JsonIgnore]
         public int ParamCount {
             get; set;
         }
