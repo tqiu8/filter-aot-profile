@@ -12,22 +12,19 @@ using Mono.Profiler.Aot;
 public class AotProfileFilter
 {
     public string Input { get; set; }
-    public string Output { get; set; }
+    public string? Output { get; set; }
     public string[]? ExcludeMethods { get; set; }
     public bool Dump { get; set; }
 
-    public AotProfileFilter(string input, string output, string[] excluded=null, bool dump=false)
+    public AotProfileFilter(string input, string output=null, string[] excluded=null, bool dump=false)
     {
         Input = input;
-        Output = output; 
+        if (output != null)
+            Output = output;
         if (excluded != null)
-        {
             ExcludeMethods = excluded;
-        }
         if (dump)
-        {
             Dump = dump;
-        }
     }
 
     public string[] DumpMethods(ProfileData profile)
@@ -40,7 +37,7 @@ public class AotProfileFilter
         return methodNames.ToArray();
     }
 
-    public bool Execute ()
+    public bool Execute (string methodPath)
     {
         var reader = new ProfileReader();
         ProfileData profile;
@@ -63,7 +60,7 @@ public class AotProfileFilter
         if (Dump)
         {
             methodNames = DumpMethods(profile);
-            File.WriteAllLines("methods.txt", methodNames.ToArray());
+            File.WriteAllLines(methodPath, methodNames.ToArray());
         }
         var writer = new ProfileWriter();
         using (FileStream outStream = File.Create(Output))

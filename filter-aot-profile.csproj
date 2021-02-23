@@ -5,6 +5,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>filter_aot_profile</RootNamespace>
     <nullable>enable</nullable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>profilefilter</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Options" Version="6.6.0.161" />
+  </ItemGroup>
 
 </Project>
