@@ -62,9 +62,12 @@ public class AotProfileFilter
             methodNames = DumpMethods(profile);
             File.WriteAllLines(methodPath, methodNames.ToArray());
         }
-        var writer = new ProfileWriter();
-        using (FileStream outStream = File.Create(Output))
-            writer.WriteAllData(outStream, profile);
+        if (Output != null)
+        {
+            var writer = new ProfileWriter();
+            using (FileStream outStream = File.Create(Output!))
+                writer.WriteAllData(outStream, profile);
+        }
 
         return true;
     }

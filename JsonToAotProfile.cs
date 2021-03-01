@@ -11,12 +11,12 @@ using Mono.Profiler.Aot;
 public class JsonToAotProfile
 {
     public string Input { get; set; }
-    public string Output { get; set; }
+    public string OutputDir { get; set; }
 
     public JsonToAotProfile(string input, string output)
     {
         Input = input;
-        Output = output;
+        OutputDir = output;
     }
     
     public string[] GenerateRandomExclusions(int length, string methodsPath)
@@ -46,12 +46,14 @@ public class JsonToAotProfile
 
         for(var i=0; i<batch; i++)
         {
-            var outputPath = Path.Combine("trimmed-profiles", $"{Path.GetFileNameWithoutExtension(Output)}{i}.profile");
+            var outputPath = Path.Combine(OutputDir, $"trimmed-{i}.profile");
             string[] excludedMethods = GenerateRandomExclusions(10, methodPath);
             using (FileStream outStream = File.Create(outputPath))
             {
                 writer.WriteAllData(outStream, data, excludedMethods);
             }
+            var trackingPath = Path.Combine(OutputDir, $"methods-{i}.txt");
+            File.WriteAllLines(trackingPath, excludedMethods);
         }
         
         return true;

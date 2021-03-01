@@ -1,5 +1,6 @@
 ﻿using System;
 using Mono.Options;
+using System.IO;
 
 namespace filter_aot_profile
 {
@@ -30,33 +31,40 @@ namespace filter_aot_profile
             bool dump = false;
             bool fuzz = false;
             int batch = 10;
-            string profilePath = "";
+            string profilePath = null;
             string methodList = "methods.txt";
-            string jsonPath = "data.json";
+            string jsonPath = null;
+            string trimmedPath = null;
 
             var optionsParser = new OptionSet() {
                 { "d|dump", "dump all methdods", v => { dump = v !=null; }},
-                { "b|batch", "batch size of fuzzed profiles", v => { batch = Int32.Parse(v); }},
+                { "b|batch=", "batch size of fuzzed profiles", v => { batch = Int32.Parse(v); }},
                 { "f|fuzz", "fuzz input profile", v => { fuzz = v != null; }},
-                { "p|profilePath", "path to profile", v => { profilePath = v; }},
-                { "m|methodList", "list of methods dumped from profile", v => { methodList = v; }},
-                { "j|jsonPath", "path to profile json file", v => { jsonPath = v; }}
+                { "p|profilepath=", "path to profile", v => { profilePath = v; }},
+                { "m|methodlist=", "list of methods dumped from profile", v => { methodList = v; }},
+                { "j|jsonpath=", "path to profile json file", v => { jsonPath = v; }},
+                { "t|trimmedpath=", "path of directory for trimmed profiles", v => { trimmedPath = v; }}
             };
 
-            if (args.Length > 0)
+            if (args.Length > 0) {
                 optionsParser.Parse (args);
+            }
 
-            if (profilePath != "") {
+            if (profilePath == null) {
                 Console.WriteLine("Please enter a profile path");
                 return 1;
             }
-            if (dump)
+            if (dump) {
+                Console.WriteLine($"Dumping methods from {profilePath} to {methodList}");
                 FilterAOTProfile(profilePath, null, null, true, methodList);
-
+            }
             if (fuzz) {
-                if (jsonPath != "") {
+                if (jsonPath != null) {
                     ProfileToJson(profilePath, jsonPath);
-                    JsonToProfile(jsonPath, "trimmed-profiles/trimmed.profile", methodList, batch);
+                    if (trimmedPath == null) {
+                        trimmedPath = "trimmed-profiles";
+                    }
+                    JsonToProfile(jsonPath, trimmedPath, methodList, batch);
                 }
                 else {
                     Console.WriteLine("Please enter the path to the profile json file");
