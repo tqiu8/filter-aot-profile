@@ -63,6 +63,9 @@ namespace filter_aot_profile
                     ProfileToJson(profilePath, jsonPath);
                     if (trimmedPath == null) {
                         trimmedPath = "trimmed-profiles";
+                    } else {
+                        if (!Directory.Exists(trimmedPath))
+                            Directory.CreateDirectory(trimmedPath);
                     }
                     JsonToProfile(jsonPath, trimmedPath, methodList, batch);
                 }

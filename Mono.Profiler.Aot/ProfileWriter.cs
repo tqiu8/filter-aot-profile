@@ -127,7 +127,8 @@ namespace Mono.Profiler.Aot {
                 {
                     WriteMethod (m);
                 }
-            // make sure ew have all the types
+            }
+            // make sure we have all the types
             // sometime the profile contain type, which is not referenced from the methods
             foreach (var t in data.Types!)
                 AddType (t);

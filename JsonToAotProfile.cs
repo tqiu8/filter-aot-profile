@@ -22,9 +22,10 @@ public class JsonToAotProfile
     public string[] GenerateRandomExclusions(int length, string methodsPath)
     {
         string[] methods = File.ReadAllLines(methodsPath);
+        Console.WriteLine($"length of methods {methods.Length}");
         List<string> newMethods = new List<string>();
         var rand = new Random();
-        for (var i = 0; i<length; i++) {
+        for (var i = 0; i<=length; i++) {
             var ix = rand.Next(methods.Length);
             newMethods.Add(methods[ix]);
             Console.WriteLine(methods[ix]);
@@ -41,11 +42,11 @@ public class JsonToAotProfile
             ReferenceHandler = ReferenceHandler.Preserve,
         };
         byte[] inputData = File.ReadAllBytes(Input!);
-        ProfileData data = JsonSerializer.Deserialize<ProfileData>(inputData, serializeOptions)!;
         var writer = new ProfileWriter();
 
         for(var i=0; i<batch; i++)
         {
+            ProfileData data = JsonSerializer.Deserialize<ProfileData>(inputData, serializeOptions)!;
             var outputPath = Path.Combine(OutputDir, $"trimmed-{i}.profile");
             string[] excludedMethods = GenerateRandomExclusions(10, methodPath);
             using (FileStream outStream = File.Create(outputPath))
